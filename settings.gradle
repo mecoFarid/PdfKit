@@ -1,0 +1,3 @@
+include ':pdfkit'
+include ':app'
+rootProject.name = "PdfKitDemo"
