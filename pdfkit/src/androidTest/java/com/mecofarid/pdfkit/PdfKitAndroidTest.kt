@@ -32,19 +32,21 @@ class PdfKitAndroidTest {
     fun test_startConversion_1() {
         getExternalFilesDir("PdfKitDemo_1.pdf")?.let { outputFile ->
             println(println("Logger a-00"))
-            PdfKit(getContext()).startConversion(
-                    url = "https://stackoverflow.com/",
-                    outputFile = outputFile,
-                    onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
-                        override fun onError(e: Exception) {
-                            println("PDFPRINT onError: $e")
-                        }
+            Handler(getContext().mainLooper).post {
+                PdfKit(getContext()).startConversion(
+                        url = "https://stackoverflow.com/",
+                        outputFile = outputFile,
+                        onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
+                            override fun onError(e: Exception) {
+                                println("PDFPRINT onError: $e")
+                            }
 
-                        override fun onSuccess(pdfFileLocation: File) {
-                            println("PDFPRINT onSuccess: $outputFile")
+                            override fun onSuccess(pdfFileLocation: File) {
+                                println("PDFPRINT onSuccess: $outputFile")
+                            }
                         }
-                    }
-            )
+                )
+            }
         }
     }
 

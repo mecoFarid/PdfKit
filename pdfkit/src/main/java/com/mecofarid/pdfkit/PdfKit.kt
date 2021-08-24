@@ -6,9 +6,11 @@ import android.print.PrintAttributes
 import android.webkit.WebView
 import android.print.InternalPdfConverter
 import android.util.Log
+import com.mecofarid.logger.Logger
 import java.io.File
 
-private const val PDF_EXTENSION = ".pdf"
+private const val PDF_EXTENSION = "pdf"
+private const val TAG = "PdfKit"
 class PdfKit(private val context: Context) {
     fun startConversion(
             url: String,
@@ -17,13 +19,23 @@ class PdfKit(private val context: Context) {
             outputFile: File,
             onPdfPrintListener: OnPdfConversionListener
     ) {
-
-        Handler(context.mainLooper).post {
-            WebView(context).also { webView ->
-                startConversion(webView = webView, printAttributes = printAttributes, outputFile = outputFile, onPdfPrintListener = onPdfPrintListener)
-                webView.loadUrl(url, headers)
+        Logger.d(TAG, "startConversion with: " +
+                "URL:$url " +
+                "Headers:$headers " +
+                "PrintAttributes:$printAttributes " +
+                "OutputFile:$outputFile" +
+                "OnPdfConversionListener:$onPdfPrintListener"
+        )
+        startConversion(
+            printAttributes = printAttributes,
+            outputFile = outputFile,
+            onPdfPrintListener = onPdfPrintListener,
+            object : WebViewCreatedListener{
+                override fun onWebViewCreated(webView: WebView) {
+                    webView.loadUrl(url, headers)
+                }
             }
-        }
+        )
     }
 
     fun startConversion(
@@ -36,25 +48,58 @@ class PdfKit(private val context: Context) {
             outputFile: File,
             onPdfPrintListener: OnPdfConversionListener
     ) {
-        Handler(context.mainLooper).post {
-            WebView(context).also { webView ->
-                startConversion(webView = webView, printAttributes = printAttributes, outputFile = outputFile, onPdfPrintListener = onPdfPrintListener)
-                webView.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, historyUrl)
+        Logger.d(TAG, "startConversion with: " +
+                "BaseURL:$baseUrl " +
+                "Data:$data " +
+                "MimeType:$mimeType " +
+                "Encoding:$encoding " +
+                "HistoryURL:$historyUrl " +
+                "PrintAttributes:$printAttributes " +
+                "OutputFile:$outputFile" +
+                "OnPdfConversionListener:$onPdfPrintListener"
+        )
+
+        startConversion(
+            printAttributes = printAttributes,
+            outputFile = outputFile,
+            onPdfPrintListener = onPdfPrintListener,
+            object : WebViewCreatedListener{
+                override fun onWebViewCreated(webView: WebView) {
+                    webView.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, historyUrl)
+                }
             }
-        }
+        )
     }
 
-    fun startConversion(
-            webView: WebView,
+    private fun startConversion(
             printAttributes: PrintAttributes? = null,
             outputFile: File,
-            onPdfPrintListener: OnPdfConversionListener
+            onPdfPrintListener: OnPdfConversionListener,
+            onWebViewCreatedListener: WebViewCreatedListener
     ) {
+        Logger.d(TAG, "startConversion with: " +
+                "PrintAttributes:$printAttributes " +
+                "OutputFile:$outputFile" +
+                "OnPdfConversionListener:$onPdfPrintListener"
+        )
+
         if (!outputFile.isPdfFile()) {
             onPdfPrintListener.onError(IllegalArgumentException("Output file must end with \"$PDF_EXTENSION\" extension"))
             return
         }
-        InternalPdfConverter.instance.startConversion(webView = webView, printAttributes = printAttributes, outputFile = outputFile, onPdfPrintListener = onPdfPrintListener)
+
+
+        ConversionHandler.execute {
+            WebView(context).also { webView ->
+                InternalPdfConverter.startConversion(
+                    webView = webView,
+                    printAttributes = printAttributes,
+                    outputFile = outputFile,
+                    onPdfPrintListener = onPdfPrintListener
+                )
+                onWebViewCreatedListener.onWebViewCreated(webView)
+            }
+        }
     }
 
     interface OnPdfConversionListener {
@@ -62,7 +107,11 @@ class PdfKit(private val context: Context) {
         fun onSuccess(pdfFileLocation: File)
     }
 
+    private interface WebViewCreatedListener{
+        fun onWebViewCreated(webView: WebView)
+    }
+
     private fun File.isPdfFile() =
-            this.name.endsWith(PDF_EXTENSION, true)
+            this.extension.equals(other = PDF_EXTENSION, ignoreCase = true)
 
 }

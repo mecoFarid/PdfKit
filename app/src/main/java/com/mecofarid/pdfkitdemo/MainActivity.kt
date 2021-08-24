@@ -10,26 +10,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        getFile("PdfKitDemo_1.pdf").let { outputFile ->
-//            PdfKit(this).startConversion(
-//                    url = "https://stackoverflow.com/",
-//                    outputFile = outputFile,
-//                    onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
-//                        override fun onError(e: Exception) {
-//                            println("PDFPRINT onError: $e")
-//                        }
+//        Thread()
+//        Handler(HandlerThread("PdfConverterHandlerThread").looper) {
+//            getFile("PdfKitDemo_1.pdf").let { outputFile ->
+//                PdfKit(application.applicationContext).startConversion(
+//                        url = "https://stackoverflow.com/",
+//                        outputFile = outputFile,
+//                        onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
+//                            override fun onError(e: Exception) {
+//                                println("PDFPRINT onError: $e")
+//                            }
 //
-//                        override fun onSuccess(pdfFileLocation: File) {
-//                            println("PDFPRINT onSuccess: $outputFile")
+//                            override fun onSuccess(pdfFileLocation: File) {
+//                                println("PDFPRINT onSuccess: $outputFile")
+//                            }
 //                        }
-//                    }
-//            )
-//        }
+//                )
+//            }
+//        }.start()
+
+
+
 
         getFile("PdfKitDemo_2.pdf").let { outputFile ->
             PdfKit(this).startConversion(
                     baseUrl = getAssetDirectoryPath(),
-                    data = PrinterFactory.htmlData,
+                    data = PdfConverterDataFactory.htmlData,
                     outputFile = outputFile,
                     onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
                         override fun onError(e: Exception) {
