@@ -1,6 +1,7 @@
 package com.mecofarid.pdfkitdemo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.mecofarid.pdfkit.PdfKit
 import java.io.File
@@ -12,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         getFile("PdfKitDemo_1.pdf").let { outputFile ->
             PdfKit(application.applicationContext).startConversion(
-                    url = "https://www.github.com/",
+                    url = "http://www.tayqatech.com/",
                     outputFile = outputFile,
                     javascriptEnabled = true,
                     onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
