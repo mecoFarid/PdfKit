@@ -1,5 +1,7 @@
 # PdfKit
 
+![alt Library Logo](https://raw.githubusercontent.com/mecoFarid/PdfKit/master/extra_media/library_logo.jpg)
+
 # Table of Contents  
 - [Get Started](https://github.com/mecoFarid/PdfKit#Get-Started)  
 - [Usage](https://github.com/mecoFarid/PdfKit#Usage)  
