@@ -43,7 +43,7 @@ Step 2. Add PdfKit dependency
 | `outputFile`  | File where the pdf file should be saved must end with `.pdf` extension |  `/storage/emulated/0/Android/data/com.mecofarid.pdfkitdemo/files/pdf/PdfKitDemo_1.pdf`
 | `javascriptEnabled`  | `true` if you want to enable javascript. By default it is `false` |  `-`
 
-For example usage see [MainActivity](https://github.com/mecoFarid/PdfKit/blob/1913fb387d2fb48edfddee847d33951a14927b8b/app/src/main/java/com/mecofarid/pdfkitdemo/MainActivity.kt#L30)
+For example usage see [MainActivity](https://github.com/mecoFarid/PdfKit/blob/1913fb387d2fb48edfddee847d33951a14927b8b/app/src/main/java/com/mecofarid/pdfkitdemo/MainActivity.kt)
 
 ### 2. Load remote URL and convert it to PDF 
 
@@ -70,9 +70,15 @@ For example usage see [MainActivity](https://github.com/mecoFarid/PdfKit/blob/19
 | `outputFile`  | File where the pdf file should be saved must end with `.pdf` extension |  `/storage/emulated/0/Android/data/com.mecofarid.pdfkitdemo/files/pdf/PdfKitDemo_1.pdf`
 | `javascriptEnabled`  | `true` if you want to enable javascript. By default it is `false` |  `-`
 
-For example usage see [MainActivity](https://github.com/mecoFarid/PdfKit/blob/1913fb387d2fb48edfddee847d33951a14927b8b/app/src/main/java/com/mecofarid/pdfkitdemo/MainActivity.kt#L13)
+For example usage see [MainActivity](https://github.com/mecoFarid/PdfKit/blob/1913fb387d2fb48edfddee847d33951a14927b8b/app/src/main/java/com/mecofarid/pdfkitdemo/MainActivity.kt)
 
+## Troubleshooting
 
+If you're getting following error when loading `http` schema URLs
+> java.lang.Exception: Error loading `http://www.example.com/;` Error code: -1; Description: net::ERR_CLEARTEXT_NOT_PERMITTED; 
+
+You can resolve this by adding [network security configuration](https://developer.android.com/training/articles/security-config#manifest). For example usage see 
+[AndroidManifest.xml](https://github.com/mecoFarid/PdfKit/blob/master/app/src/main/AndroidManifest.xml) file of this project with `android:networkSecurityConfig="@xml/network_security_config"` aatribute
 
 # Know Bug:
 When loading `http`/`https` schema URLs, sometimes WebView's onPageFinished method won't be called due to Chromium bug 'crbug.com/1244039'.
