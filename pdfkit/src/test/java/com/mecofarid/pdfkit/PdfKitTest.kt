@@ -2,6 +2,7 @@ package com.mecofarid.pdfkit
 
 import android.content.Context
 import android.os.Handler
+import android.os.HandlerThread
 import android.os.Looper
 import android.os.Message
 import android.util.Log
@@ -35,45 +36,39 @@ class PdfKitTest {
     @Test
     fun test_startConversion_1() {
         for (i in 0..100) {
-            Thread {
-                println("s ")
-                println("$i ${ConversionHandler.integ}")
-            }.start()
+            ConversionHandler.execute {
+                Log.d("TAG", "test_startConversion_1: ${Thread.currentThread().id}")
+            }
         }
     }
 
-    internal object ConversionHandler {
+    internal object ConversionHandler: HandlerThread("NAME"){
 
-        /**
-         * As recommended in https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/os/AsyncTask.java
-         */
-        private const val CORE_POOL_SIZE = 1
+        private const val CORE_POOL_SIZE = 5
         private const val MAXIMUM_POOL_SIZE = 20
         private const val KEEP_ALIVE_SECONDS = 3L
-        val integ by lazy {
-            println("${Thread.currentThread()}")
-            Testo()
-        }
-        val handler by lazy {
-            Looper.prepare()
-            val handler = object : Handler(Looper.myLooper()!!) {
+        private val handler by lazy {
+            object : Handler(looper) {
                 override fun handleMessage(msg: Message) {
                     threadPoolExecutor.execute(msg.obj as Runnable)
                 }
             }
-            Looper.loop()
-            handler
         }
 
         private val threadPoolExecutor = ThreadPoolExecutor(
-            CORE_POOL_SIZE,
-            MAXIMUM_POOL_SIZE,
-            KEEP_ALIVE_SECONDS,
-            TimeUnit.SECONDS,
-            LinkedBlockingQueue()
-        )
+                CORE_POOL_SIZE,
+                MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE_SECONDS,
+                TimeUnit.SECONDS,
+                LinkedBlockingQueue()
+        ).also {
+            it.allowCoreThreadTimeOut(true)
+        }
+
+        internal fun execute(runnable: Runnable){
+            if (!isAlive)
+                start()
+            handler.post(runnable)
+        }
     }
-
-
-    class Testo
 }

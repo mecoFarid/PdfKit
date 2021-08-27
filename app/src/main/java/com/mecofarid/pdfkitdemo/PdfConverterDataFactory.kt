@@ -20,7 +20,7 @@ object PdfConverterDataFactory {
             "</head>\n" +
             "<body>\n" +
             "\n" +
-            "<img src=\"../random.jpg\" alt=\"Random image\">\n" +
+            "<img src=\"random.jpg\" alt=\"Random image\">\n" +
             "\n" +
             "<h2>Striped Table</h2>\n" +
             "<p>For zebra-striped tables, use the nth-child() selector and add a background-color to all even (or odd) table rows:</p>\n" +

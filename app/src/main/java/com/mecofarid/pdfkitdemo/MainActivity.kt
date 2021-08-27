@@ -1,7 +1,7 @@
 package com.mecofarid.pdfkitdemo
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.mecofarid.pdfkit.PdfKit
 import java.io.File
 
@@ -10,40 +10,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        Thread()
-//        Handler(HandlerThread("PdfConverterHandlerThread").looper) {
-//            getFile("PdfKitDemo_1.pdf").let { outputFile ->
-//                PdfKit(application.applicationContext).startConversion(
-//                        url = "https://stackoverflow.com/",
-//                        outputFile = outputFile,
-//                        onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
-//                            override fun onError(e: Exception) {
-//                                println("PDFPRINT onError: $e")
-//                            }
-//
-//                            override fun onSuccess(pdfFileLocation: File) {
-//                                println("PDFPRINT onSuccess: $outputFile")
-//                            }
-//                        }
-//                )
-//            }
-//        }.start()
+        getFile("PdfKitDemo_1.pdf").let { outputFile ->
+            PdfKit(application.applicationContext).startConversion(
+                    url = "https://www.github.com/",
+                    outputFile = outputFile,
+                    javascriptEnabled = true,
+                    onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
+                        override fun onError(e: Exception) {
+                            println("PDFPRINT remote onError: $e")
+                        }
 
-
-
+                        override fun onSuccess(pdfFileLocation: File) {
+                            println("PDFPRINT remote onSuccess: $outputFile")
+                        }
+                    }
+            )
+        }
 
         getFile("PdfKitDemo_2.pdf").let { outputFile ->
             PdfKit(this).startConversion(
                     baseUrl = getAssetDirectoryPath(),
                     data = PdfConverterDataFactory.htmlData,
+                    javascriptEnabled = true,
                     outputFile = outputFile,
                     onPdfPrintListener = object : PdfKit.OnPdfConversionListener {
                         override fun onError(e: Exception) {
-                            println("PDFPRINT onError: $e")
+                            println("PDFPRINT local onError: $e")
                         }
 
                         override fun onSuccess(pdfFileLocation: File) {
-                            println("PDFPRINT onSuccess: $outputFile")
+                            println("PDFPRINT local onSuccess: $outputFile")
                         }
                     }
             )
