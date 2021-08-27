@@ -86,5 +86,5 @@ If you're getting following error when loading `http` schema URLs
 You can resolve this by adding [network security configuration](https://developer.android.com/training/articles/security-config#manifest). For example usage see 
 [AndroidManifest.xml](https://github.com/mecoFarid/PdfKit/blob/master/app/src/main/AndroidManifest.xml) file of this project with `android:networkSecurityConfig="@xml/network_security_config"` attribute
 
-## Know Bug:
+## Known Bug:
 When loading `http`/`https` schema URLs, sometimes WebView's onPageFinished method won't be called due to Chromium bug 'crbug.com/1244039'.
