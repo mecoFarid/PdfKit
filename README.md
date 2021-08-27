@@ -78,7 +78,7 @@ If you're getting following error when loading `http` schema URLs
 > java.lang.Exception: Error loading `http://www.example.com/;` Error code: -1; Description: net::ERR_CLEARTEXT_NOT_PERMITTED; 
 
 You can resolve this by adding [network security configuration](https://developer.android.com/training/articles/security-config#manifest). For example usage see 
-[AndroidManifest.xml](https://github.com/mecoFarid/PdfKit/blob/master/app/src/main/AndroidManifest.xml) file of this project with `android:networkSecurityConfig="@xml/network_security_config"` aatribute
+[AndroidManifest.xml](https://github.com/mecoFarid/PdfKit/blob/master/app/src/main/AndroidManifest.xml) file of this project with `android:networkSecurityConfig="@xml/network_security_config"` attribute
 
 # Know Bug:
 When loading `http`/`https` schema URLs, sometimes WebView's onPageFinished method won't be called due to Chromium bug 'crbug.com/1244039'.
